@@ -1,0 +1,37 @@
+<%- include('partials/_head.ejs') %>
+<%- include('partials/_header.ejs') %>
+
+<h1>Quotation Summary</h1>
+
+<div>
+  <h2>Project: <%= quotation.projectName %></h2>
+  <h3>Client: <%= quotation.clientName %></h3>
+  <ul>
+    <% quotation.windows.forEach(function(window, index) { %>
+      <li>
+        Window <%= index + 1 %>:
+        <ul>
+          <li>Width: <%= window.width %> mm</li>
+          <li>Height: <%= window.height %> mm</li>
+          <li>System Type: <%= window.systemType %></li>
+          <li>Aluminum Color: <%= window.aluminumColor %></li>
+          <li>Glass Type: <%= window.glassType %></li>
+          <li>Glass Color: <%= window.glassColor %></li>
+          <li>Energetical LowE: <%= window.energeticalLowE ? 'Yes' : 'No' %></li>
+          <!-- Additional window details can be listed here -->
+          <% window.profiles.forEach(function(profile) { %>
+            <li>Profile: <%= profile.profileName %>, Length: <%= profile.length %> mm, Quantity: <%= profile.quantity %></li>
+          <% }); %>
+          <% window.accessories.forEach(function(accessory) { %>
+            <li>Accessory: <%= accessory.accessoryName %>, Quantity: <%= accessory.quantity %></li>
+          <% }); %>
+          <li>Glass: <%= window.glass.type %>, Color: <%= window.glass.color %>, Price per Square Meter: <%= window.glass.pricePerSquareMeter %></li>
+        </ul>
+      </li>
+    <% }); %>
+  </ul>
+  <h3>Total Price: <%= totalPrice.toFixed(2) %></h3>
+  <a href="/quotation/add-window/<%= quotation._id %>">Add More Windows</a> | <a href="/export-quotation/<%= quotation._id %>">Finalize and Export to PDF</a>
+</div>
+
+<%- include('partials/_footer.ejs') %>

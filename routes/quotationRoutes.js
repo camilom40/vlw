@@ -5,7 +5,6 @@ const { isAuthenticated } = require('./middleware/authMiddleware');
 const AluminumExtrusion = require('../models/AluminumExtrusion');
 const Accessory = require('../models/Accessory');
 const Glass = require('../models/Glass');
-const quotationCalculator = require('../utils/quotationCalculator');
 const PDFDocument = require('pdfkit');
 
 // Route to create a new quotation
@@ -40,6 +39,13 @@ router.post('/add-window/:quotationId', isAuthenticated, async (req, res) => {
       return res.status(403).send('You do not have permission to modify this quotation.');
     }
 
+    // Fetch default glass configuration if specific glass details are not provided
+    const defaultGlass = await Glass.findOne({ type: "Default" }); // Fetching a default glass configuration with a meaningful criterion
+    if (!defaultGlass) {
+      console.error('Default glass configuration not found');
+      return res.status(500).send('Internal server error due to missing glass configuration.');
+    }
+
     // Add the new window to the quotation
     quotation.windows.push({
       width,
@@ -50,8 +56,11 @@ router.post('/add-window/:quotationId', isAuthenticated, async (req, res) => {
       ventSizes: ventSizes.split(',').map(size => size.trim()),
       handle,
       aluminumColor,
-      glassType,
-      glassColor,
+      glass: {
+        type: glassType || defaultGlass.type,
+        color: glassColor || defaultGlass.color,
+        pricePerSquareMeter: glassType && glassColor ? req.body.glassPricePerSquareMeter : defaultGlass.pricePerSquareMeter
+      },
       energeticalLowE: energeticalLowE === 'on',
       systemType
     });
@@ -96,6 +105,31 @@ router.get('/add-window/:quotationId', isAuthenticated, (req, res) => {
   } catch (error) {
     console.error('Error displaying window form:', error);
     res.status(500).send('Failed to display window form');
+  }
+});
+
+// Route to display quotation summary and total price calculation
+router.get('/quotation-summary/:id', isAuthenticated, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const quotation = await Quotation.findById(id)
+      .populate('windows.profiles')
+      .populate('windows.accessories')
+      .populate('windows.glass');
+    if (!quotation) {
+      console.log(`Quotation with ID: ${id} not found.`);
+      return res.status(404).send('Quotation not found');
+    }
+
+    // Calculate the total price
+    await quotation.calculateTotalCost(); // This line ensures the total cost is calculated and updated in the database
+    const totalPrice = quotation.totalCost; // Use the updated totalCost for the quotation summary
+
+    console.log(`Displaying quotation summary for ID: ${id}`);
+    res.render('quotationSummary', { quotation, totalPrice });
+  } catch (error) {
+    console.error('Error fetching quotation summary:', error);
+    res.status(500).send('Failed to fetch quotation summary');
   }
 });
 
