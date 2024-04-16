@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/_head.ejs') %>
+<body>
+<%- include('../partials/_header.ejs') %>
+<main role="main" class="container mt-4">
+    <h2>Window System Manager</h2>
+    <form action="/admin/window-systems/save" method="POST">
+        <div>
+            <label for="systemType">System Type:</label>
+            <input type="text" id="systemType" name="systemType" required>
+        </div>
+        <div>
+            <label for="extrusions">Aluminum Extrusions (JSON format):</label>
+            <textarea id="extrusions" name="extrusions" rows="10" required placeholder='[{"name": "Sill", "number": "104", "length": "windowWidth", "quantity": 1}, {"name": "Head", "number": "116", "length": "windowWidth", "quantity": 1}]'></textarea>
+            <!-- INPUT_REQUIRED {Provide the JSON format for aluminum extrusions configuration} -->
+        </div>
+        <div>
+            <label for="accessories">Accessories (JSON format):</label>
+            <textarea id="accessories" name="accessories" rows="5" required placeholder='[{"name": "Sweep Latch", "type": "unitary", "quantity": 2}, {"name": "Sash Guide", "type": "unitary", "quantity": 4}]'></textarea>
+            <!-- INPUT_REQUIRED {Provide the JSON format for accessories configuration} -->
+        </div>
+        <button type="submit">Save System</button>
+    </form>
+</main>
+<%- include('../partials/_footer.ejs') %>
+<script src="/js/main.js"></script>
+<script>
+    document.querySelector('form').addEventListener('submit', function(event) {
+        try {
+            // Validate JSON format for extrusions and accessories
+            JSON.parse(document.getElementById('extrusions').value);
+            JSON.parse(document.getElementById('accessories').value);
+        } catch (error) {
+            console.error('Failed to parse JSON:', error);
+            alert('Invalid JSON format for extrusions or accessories. Please correct and try again.');
+            event.preventDefault(); // Prevent form submission
+        }
+    });
+</script>
+</body>
+</html>

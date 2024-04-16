@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('partials/_head.ejs') %>
+<body>
+<%- include('partials/_header.ejs') %>
+<main role="main" class="container mt-4">
+    <h2>Add Window to Quotation</h2>
+    <form action="/quotation/add-window/<%= quotationId %>" method="POST">
+        <div>
+            <label for="systemType">System Type:</label>
+            <select id="systemType" name="systemType" required>
+                <option value="Fixed Window">Fixed Window</option>
+                <option value="Single Hung Window">Single Hung Window</option>
+                <option value="Horizontal Roller">Horizontal Roller</option>
+                <option value="French Door">French Door</option>
+            </select>
+        </div>
+        <div>
+            <label for="width">Width (mm):</label>
+            <input type="number" id="width" name="width" required>
+        </div>
+        <div>
+            <label for="height">Height (mm):</label>
+            <input type="number" id="height" name="height" required>
+        </div>
+        <div>
+            <label for="positiveLoad">Positive Load (PSF):</label>
+            <input type="number" id="positiveLoad" name="positiveLoad" required>
+        </div>
+        <div>
+            <label for="negativeLoad">Negative Load (PSF):</label>
+            <input type="number" id="negativeLoad" name="negativeLoad" required>
+        </div>
+        <div>
+            <label for="impactType">Impact Type:</label>
+            <select id="impactType" name="impactType" required>
+                <option value="Small Missile">Small Missile</option>
+                <option value="Large Missile">Large Missile</option>
+            </select>
+        </div>
+        <div>
+            <label for="ventSizes">Vent Sizes (comma-separated, if applicable):</label>
+            <input type="text" id="ventSizes" name="ventSizes">
+        </div>
+        <div>
+            <label for="handle">Handle:</label>
+            <select id="handle" name="handle" required>
+                <option value="Handle 1">Handle 1</option>
+                <option value="Handle 2">Handle 2</option>
+            </select>
+        </div>
+        <div>
+            <label for="aluminumColor">Aluminum Color:</label>
+            <select id="aluminumColor" name="aluminumColor" required>
+                <option value="Black">Black</option>
+                <option value="White">White</option>
+                <option value="Bronce">Bronce</option>
+            </select>
+        </div>
+        <div>
+            <label for="glassType">Glass Type:</label>
+            <select id="glassType" name="glassType" required>
+                <option value="Single Glazed">Single Glazed</option>
+                <option value="Double Glazed">Double Glazed</option>
+            </select>
+        </div>
+        <div>
+            <label for="glassColor">Glass Color:</label>
+            <select id="glassColor" name="glassColor" required>
+                <option value="Clear">Clear</option>
+                <option value="Lake Blue">Lake Blue</option>
+                <option value="Dark Blue">Dark Blue</option>
+                <option value="Green">Green</option>
+                <option value="Bronce">Bronce</option>
+            </select>
+        </div>
+        <div>
+            <label for="energeticalLowE">Energetical Low E:</label>
+            <input type="checkbox" id="energeticalLowE" name="energeticalLowE">
+        </div>
+        <button type="submit">Add Window</button>
+    </form>
+</main>
+<%- include('partials/_footer.ejs') %>
+<script src="/js/main.js"></script>
+</body>
+</html>

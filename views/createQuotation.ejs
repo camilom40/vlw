@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('partials/_head.ejs') %>
+<body>
+<%- include('partials/_header.ejs') %>
+<main role="main" class="container mt-4">
+    <h2>Create New Quotation</h2>
+    <form action="/quotation/create-quotation" method="POST">
+        <div>
+            <label for="projectName">Project Name:</label>
+            <input type="text" id="projectName" name="projectName" required>
+        </div>
+        <div>
+            <label for="clientName">Client Name:</label>
+            <input type="text" id="clientName" name="clientName" required>
+        </div>
+        <button type="submit">Create Quotation</button>
+    </form>
+</main>
+<%- include('partials/_footer.ejs') %>
+<script src="/js/main.js"></script>
+</body>
+</html>

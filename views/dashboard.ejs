@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('partials/_head.ejs') %>
+<body>
+<%- include('partials/_header.ejs') %>
+<main role="main" class="container mt-4">
+    <h2>Dashboard</h2>
+    <div>
+        <p>Welcome to your dashboard. Here you can manage your quotations and add new windows to them.</p>
+        <a href="/quotation/create-quotation" class="btn btn-primary">Create New Quotation</a>
+        <p>Or select an existing quotation to add windows:</p>
+        <% if (quotations && quotations.length > 0) { %>
+            <ul>
+                <% quotations.forEach(function(quotation) { %>
+                    <li>
+                        <a href="/quotation/add-window/<%= quotation._id %>"><%= quotation.projectName %> - <%= quotation.clientName %></a>
+                        <ul>
+                            <% quotation.windows.forEach(function(window) { %>
+                                <li>System Type: <%= window.systemType %>, Width: <%= window.width %>mm, Height: <%= window.height %>mm, Glass Type: <%= window.glassType %>, Color: <%= window.aluminumColor %></li>
+                            <% }); %>
+                        </ul>
+                        <a href="/quotation/export-quotation/<%= quotation._id %>" class="btn btn-secondary">Export to PDF</a>
+                    </li>
+                <% }); %>
+            </ul>
+        <% } else { %>
+            <p>No existing quotations found. Create a new one to get started.</p>
+        <% } %>
+    </div>
+</main>
+<%- include('partials/_footer.ejs') %>
+<script src="/js/main.js"></script>
+</body>
+</html>

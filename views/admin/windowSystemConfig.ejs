@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/_head.ejs') %>
+<body>
+<%- include('../partials/_header.ejs') %>
+<main role="main" class="container mt-4">
+    <h2>Window System Configuration</h2>
+    <form action="/admin/window-system-config" method="POST">
+        <div>
+            <label for="systemType">System Type:</label>
+            <input type="text" id="systemType" name="systemType" required>
+        </div>
+        <div>
+            <label for="extrusions">Aluminum Extrusions (JSON format):</label>
+            <textarea id="extrusions" name="extrusions" rows="5" required></textarea>
+            <small>Format: [{"name": "Sill", "length": "windowWidth", "quantity": 1}, ...]</small>
+        </div>
+        <div>
+            <label for="accessories">Accessories (JSON format):</label>
+            <textarea id="accessories" name="accessories" rows="5" required></textarea>
+            <small>Format: [{"name": "Handle", "quantity": 2, "price": 5.00}, ...]</small>
+        </div>
+        <div>
+            <label for="glassOptions">Glass Options (JSON format):</label>
+            <textarea id="glassOptions" name="glassOptions" rows="5" required></textarea>
+            <small>Format: [{"type": "Single Glazed", "color": "Clear", "pricePerSquareMeter": 50}, ...]</small>
+        </div>
+        <button type="submit">Save Configuration</button>
+    </form>
+</main>
+<%- include('../partials/_footer.ejs') %>
+<script src="/js/main.js"></script>
+<script>
+    document.querySelector('form').addEventListener('submit', function(e) {
+        try {
+            // Validate JSON inputs
+            JSON.parse(document.getElementById('extrusions').value);
+            JSON.parse(document.getElementById('accessories').value);
+            JSON.parse(document.getElementById('glassOptions').value);
+        } catch (error) {
+            console.error('Failed to parse JSON input:', error);
+            alert('Invalid JSON format. Please correct and try again.');
+            e.preventDefault(); // Prevent form submission
+        }
+    });
+</script>
+</body>
+</html>
