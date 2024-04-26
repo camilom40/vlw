@@ -7,9 +7,10 @@ const MongoStore = require('connect-mongo');
 const authRoutes = require("./routes/authRoutes");
 const quotationRoutes = require('./routes/quotationRoutes'); // Added quotationRoutes
 const pdfExportRoutes = require('./routes/pdfExportRoutes'); // Added pdfExportRoutes
-const aluminumExtrusionRoutes = require('./routes/admin/extrusionRoutes')
-const accessoryRoutes = require('./routes/admin/accessoryRoutes')
-const glassRoutes = require('./routes/admin/glassRoutes')
+const aluminumExtrusionRoutes = require('./routes/admin/extrusionRoutes');
+const accessoryRoutes = require('./routes/admin/accessoryRoutes');
+const glassRoutes = require('./routes/admin/glassRoutes');
+const profileRoutes = require('./routes/admin/profileRoutes'); // Added profileRoutes
 
 if (!process.env.DATABASE_URL || !process.env.SESSION_SECRET) {
   console.error("Error: config environment variables not set. Please create/edit .env configuration file.");
@@ -78,12 +79,15 @@ app.use(authRoutes);
 
 // Quotation Routes
 app.use('/quotation', quotationRoutes); // Using the quotation routes
-app.use('/accesories', accessoryRoutes); // Using the quotation routes
-app.use('/glass', glassRoutes); // Using the quotation routes
-app.use('/aluminum', aluminumExtrusionRoutes); // Using the quotation routes
+app.use('/admin/accessories', accessoryRoutes); // Corrected typo in the path and updated to the correct admin path
+app.use('/admin/glass', glassRoutes); // Corrected the path for glass routes to be under admin
+app.use('/aluminum', aluminumExtrusionRoutes); // Using the aluminum extrusion routes
 
 // PDF Export Routes
 app.use(pdfExportRoutes); // Using the PDF export routes
+
+// Admin Routes for Profiles
+app.use('/admin/profiles', profileRoutes); // Using the profile routes
 
 // Root path response
 app.get("/", (req, res) => {

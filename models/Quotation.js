@@ -139,8 +139,7 @@ quotationSchema.methods.calculateTotalCost = async function() {
 
       // Calculate cost based on glass
       const glassArea = window.width * window.height / 1000000; // Convert mm2 to m2
-      console.log("🚀 ~ this.totalCost=awaitthis.windows.reduce ~ window.glass._id:", window.glass._id)
-      const glassItem = await Glass.findById(window.glass._id);
+      const glassItem = await Glass.findOne({ type: window.glass.type, color: window.glass.color });
       if (!glassItem) {
         console.error(`Glass ${window.glass.type} not found`);
         return acc; // Continue with the next iteration without adding the current window cost
@@ -152,7 +151,6 @@ quotationSchema.methods.calculateTotalCost = async function() {
       const globalCosts = costSettings.seaFreight + costSettings.landFreight + costSettings.packaging + costSettings.labor + costSettings.administrativeExpenses;
       windowCost += globalCosts / this.windows.length; // Distribute global costs evenly across all windows
 
-      console.log(`Accumulated cost: ${acc}, Window cost: ${windowCost}`);
       return acc + windowCost;
     }, Promise.resolve(0));
 

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Profile List</title>
+    <link rel="stylesheet" href="/css/style.css"> <!-- Ensure the path to CSS is correct -->
+</head>
+<body>
+    <h1>Profiles</h1>
+    <div>
+        <a href="/admin/profiles/add">Add New Profile</a>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Weight</th>
+                <th>Profit Margin</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% profiles.forEach(function(profile) { %>
+                <tr>
+                    <td><%= profile.name %></td>
+                    <td><%= profile.price %></td>
+                    <td><%= profile.weight %></td>
+                    <td><%= profile.profitMargin %>%</td>
+                    <td>
+                        <a href="/admin/profiles/edit/<%= profile._id %>">Edit</a> |
+                        <a href="/admin/profiles/delete/<%= profile._id %>" onclick="return confirm('Are you sure?');">Delete</a>
+                    </td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+    <script src="/js/main.js"></script> <!-- Ensure the path to JavaScript is correct -->
+</body>
+</html>

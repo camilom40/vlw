@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../partials/_head.ejs %>
+    <title>Accessory List</title>
+</head>
+<body>
+    <% include ../partials/_header.ejs %>
+
+    <div class="container mt-5">
+        <h1>Accessories</h1>
+        <a href="/admin/accessories/new" class="btn btn-primary">Add New Accessory</a>
+        <div class="mt-3">
+            <% if (accessories.length > 0) { %>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Weight</th>
+                            <th>Applicable Window Systems</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% accessories.forEach(function(accessory) { %>
+                            <tr>
+                                <td><%= accessory.name %></td>
+                                <td><%= accessory.price %></td>
+                                <td><%= accessory.weight ? accessory.weight : 'N/A' %></td>
+                                <td>
+                                    <% accessory.applicableWindowSystems.forEach(function(system, index) { %>
+                                        <%= system %><% if (index < accessory.applicableWindowSystems.length - 1) { %>, <% } %>
+                                    <% }); %>
+                                </td>
+                                <td>
+                                    <a href="/admin/accessories/edit/<%= accessory._id %>" class="btn btn-sm btn-warning">Edit</a>
+                                    <form action="/admin/accessories/delete/<%= accessory._id %>" method="POST" style="display:inline;">
+                                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            <% } else { %>
+                <p>No accessories found.</p>
+            <% } %>
+        </div>
+    </div>
+
+    <% include ../partials/_footer.ejs %>
+</body>
+</html>

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Accessory = require('../../models/Accessory');
-const { isAdmin } = require('../middleware/adminMiddleware');
+const { isAdmin } = require('../../routes/middleware/adminMiddleware');
 
 // Log utility
 const logger = require('../../utils/logger');
@@ -10,7 +10,7 @@ const logger = require('../../utils/logger');
 router.get('/', isAdmin, async (req, res) => {
   try {
     const accessories = await Accessory.find({});
-    res.render('admin/accessoriesList', { accessories });
+    res.render('admin/listAccessories', { accessories }); // Changed from 'accessoriesList' to 'listAccessories'
   } catch (error) {
     logger.error('Failed to fetch accessories:', error);
     res.status(500).send('Failed to fetch accessories');

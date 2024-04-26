@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accessory List</title>
+    <link rel="stylesheet" href="/css/style.css"> <!-- Ensure Tailwind CSS is correctly linked -->
+</head>
+<body>
+    <div class="container mx-auto">
+        <h1 class="text-xl font-bold my-4">Accessories</h1>
+        <a href="/admin/accessories/add" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Add New Accessory</a>
+        <div class="mt-4">
+            <table class="table-auto w-full">
+                <thead>
+                    <tr>
+                        <th class="px-4 py-2">Name</th>
+                        <th class="px-4 py-2">Price</th>
+                        <th class="px-4 py-2">Weight</th>
+                        <th class="px-4 py-2">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% accessories.forEach(function(accessory){ %>
+                        <tr>
+                            <td class="border px-4 py-2"><%= accessory.name %></td>
+                            <td class="border px-4 py-2"><%= accessory.price %></td>
+                            <td class="border px-4 py-2"><%= accessory.weight %></td>
+                            <td class="border px-4 py-2">
+                                <a href="/admin/accessories/edit/<%= accessory._id %>" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded">Edit</a>
+                                <a href="/admin/accessories/delete/<%= accessory._id %>" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded" onclick="return confirm('Are you sure you want to delete this accessory?');">Delete</a>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="/js/main.js"></script> <!-- Ensure the main JavaScript file is correctly linked -->
+</body>
+</html>

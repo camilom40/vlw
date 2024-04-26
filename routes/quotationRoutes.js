@@ -41,7 +41,7 @@ router.post('/add-window/:quotationId', isAuthenticated, async (req, res) => {
     }
 
     // Fetch glass configuration based on glassType provided
-    const glass = await Glass.find({type:glassType, color: glassColor});
+    const glass = await Glass.findOne({type:glassType, color: glassColor});
     console.log("🚀 ~ router.post ~ glass:", glass)
     if (!glass) {
       console.error('Glass configuration not found for provided type');
@@ -58,7 +58,12 @@ router.post('/add-window/:quotationId', isAuthenticated, async (req, res) => {
       ventSizes: ventSizes.split(',').map(size => size.trim()),
       handle,
       aluminumColor,
-      glass: glass,
+      glass: {
+        type: glassType,
+        color: glassColor,
+        pricePerSquareMeter: glass.pricePerSquareMeter,
+        weight: glass.weight
+      },
       energeticalLowE: energeticalLowE === 'on',
       systemType
     });

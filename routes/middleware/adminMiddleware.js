@@ -1,6 +1,6 @@
 const User = require('../../models/User');
 
-module.exports.isAdmin = async (req, res, next) => {
+const isAdmin = async (req, res, next) => {
   try {
     if (!req.session.userId) {
       console.log('Access denied. No user session found.');
@@ -23,3 +23,7 @@ module.exports.isAdmin = async (req, res, next) => {
     res.status(500).send('Internal Server Error');
   }
 };
+
+module.exports = {
+  isAdmin
+}
