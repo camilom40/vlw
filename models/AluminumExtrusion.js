@@ -13,16 +13,16 @@ const aluminumExtrusionSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  windowSystems: [{
-    systemType: {
-      type: String,
-      required: true
-    },
-    requiredLengthCalculation: {
+  systemType: { 
+    type: String,
+    required: true
+    }, 
+    
+    sizeDiscount: { 
       type: String,
       required: true
     }
-  }]
+ 
 }, { timestamps: true });
 
 aluminumExtrusionSchema.pre('save', function(next) {

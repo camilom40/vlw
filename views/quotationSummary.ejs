@@ -15,17 +15,16 @@
           <li>Height: <%= window.height %> mm</li>
           <li>System Type: <%= window.systemType %></li>
           <li>Aluminum Color: <%= window.aluminumColor %></li>
-          <li>Glass Type: <%= window.glassType %></li>
-          <li>Glass Color: <%= window.glassColor %></li>
+          <% if(window.glass) { %>
+            <li>Glass Type: <%= window.glass.type.name %></li>
+            <li>Glass Color: <%= window.glass.color %></li>
+            <li>Price per Square Meter: <%= window.glass.pricePerSquareMeter.toFixed(2) %></li>
+            <li>Weight: <%= window.glass.weight.toFixed(2) %></li>
+          <% } %>
           <li>Energetical LowE: <%= window.energeticalLowE ? 'Yes' : 'No' %></li>
-          <!-- Additional window details can be listed here -->
-          <% window.profiles.forEach(function(profile) { %>
-            <li>Profile: <%= profile.profileName %>, Length: <%= profile.length %> mm, Quantity: <%= profile.quantity %></li>
-          <% }); %>
           <% window.accessories.forEach(function(accessory) { %>
-            <li>Accessory: <%= accessory.accessoryName %>, Quantity: <%= accessory.quantity %></li>
+            <li>Accessory: <%= accessory.name %>, Price: <%= accessory.price.toFixed(2) %>, Weight: <%= accessory.weight.toFixed(2) %></li>
           <% }); %>
-          <li>Glass: <%= window.glass.type %>, Color: <%= window.glass.color %>, Price per Square Meter: <%= window.glass.pricePerSquareMeter %></li>
         </ul>
       </li>
     <% }); %>

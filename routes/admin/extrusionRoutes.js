@@ -6,12 +6,12 @@ const { isAdmin } = require('../middleware/adminMiddleware');
 // Route to create a new aluminum extrusion
 router.post('/create', isAdmin, async (req, res) => {
   try {
-    const { name, number, pricePerMeter, windowSystems } = req.body;
+    const { name, number, pricePerMeter, systemType } = req.body;
     const newExtrusion = await AluminumExtrusion.create({
       name,
       number,
       pricePerMeter,
-      windowSystems: JSON.parse(windowSystems) // Expecting windowSystems to be a JSON string representing an array
+      systemType
     });
     console.log(`Aluminum Extrusion created successfully: ${name}`);
     res.redirect('/admin/extrusions');

@@ -17,7 +17,7 @@ const glassSchema = new mongoose.Schema({
     type: Number,
     required: true
   }
-}, { timestamps: true });
+}, { timestamps: true});
 
 glassSchema.pre('save', function(next) {
   console.log(`Saving glass type: ${this.type} with color: ${this.color}`);

@@ -7,6 +7,9 @@ const MongoStore = require('connect-mongo');
 const authRoutes = require("./routes/authRoutes");
 const quotationRoutes = require('./routes/quotationRoutes'); // Added quotationRoutes
 const pdfExportRoutes = require('./routes/pdfExportRoutes'); // Added pdfExportRoutes
+const aluminumExtrusionRoutes = require('./routes/admin/extrusionRoutes')
+const accessoryRoutes = require('./routes/admin/accessoryRoutes')
+const glassRoutes = require('./routes/admin/glassRoutes')
 
 if (!process.env.DATABASE_URL || !process.env.SESSION_SECRET) {
   console.error("Error: config environment variables not set. Please create/edit .env configuration file.");
@@ -75,6 +78,9 @@ app.use(authRoutes);
 
 // Quotation Routes
 app.use('/quotation', quotationRoutes); // Using the quotation routes
+app.use('/accesories', accessoryRoutes); // Using the quotation routes
+app.use('/glass', glassRoutes); // Using the quotation routes
+app.use('/aluminum', aluminumExtrusionRoutes); // Using the quotation routes
 
 // PDF Export Routes
 app.use(pdfExportRoutes); // Using the PDF export routes
@@ -82,7 +88,6 @@ app.use(pdfExportRoutes); // Using the PDF export routes
 // Root path response
 app.get("/", (req, res) => {
   const sess = req.session;
-  console.log("🚀 ~ app.get ~ sess:", sess)
   // Make session available to all views
   res.locals.session = sess;
   if(sess.userId){

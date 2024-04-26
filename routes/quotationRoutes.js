@@ -6,6 +6,7 @@ const AluminumExtrusion = require('../models/AluminumExtrusion');
 const Accessory = require('../models/Accessory');
 const Glass = require('../models/Glass');
 const PDFDocument = require('pdfkit');
+const mongoose = require('mongoose');
 
 // Route to create a new quotation
 router.post('/create-quotation', isAuthenticated, async (req, res) => {
@@ -39,10 +40,11 @@ router.post('/add-window/:quotationId', isAuthenticated, async (req, res) => {
       return res.status(403).send('You do not have permission to modify this quotation.');
     }
 
-    // Fetch default glass configuration if specific glass details are not provided
-    const defaultGlass = await Glass.findOne({ type: "Default" }); // Fetching a default glass configuration with a meaningful criterion
-    if (!defaultGlass) {
-      console.error('Default glass configuration not found');
+    // Fetch glass configuration based on glassType provided
+    const glass = await Glass.find({type:glassType, color: glassColor});
+    console.log("🚀 ~ router.post ~ glass:", glass)
+    if (!glass) {
+      console.error('Glass configuration not found for provided type');
       return res.status(500).send('Internal server error due to missing glass configuration.');
     }
 
@@ -56,18 +58,14 @@ router.post('/add-window/:quotationId', isAuthenticated, async (req, res) => {
       ventSizes: ventSizes.split(',').map(size => size.trim()),
       handle,
       aluminumColor,
-      glass: {
-        type: glassType || defaultGlass.type,
-        color: glassColor || defaultGlass.color,
-        pricePerSquareMeter: glassType && glassColor ? req.body.glassPricePerSquareMeter : defaultGlass.pricePerSquareMeter
-      },
+      glass: glass,
       energeticalLowE: energeticalLowE === 'on',
       systemType
     });
     await quotation.save();
 
     console.log(`Window added successfully to quotation with ID: ${quotationId}`);
-    res.redirect("/quotation/dashboard");
+    res.redirect(`/quotation/quotation-summary/${quotationId}`);
   } catch (error) {
     console.error('Failed to add window to quotation:', error);
     res.status(500).json({ message: "Failed to add window", error: error });
@@ -113,9 +111,14 @@ router.get('/quotation-summary/:id', isAuthenticated, async (req, res) => {
   try {
     const { id } = req.params;
     const quotation = await Quotation.findById(id)
-      .populate('windows.profiles')
-      .populate('windows.accessories')
-      .populate('windows.glass');
+      .populate({
+        path: 'windows.accessories',
+        model: 'Accessory'
+      })
+      .populate({
+        path: 'windows.glass',
+        model: 'Glass'
+      });
     if (!quotation) {
       console.log(`Quotation with ID: ${id} not found.`);
       return res.status(404).send('Quotation not found');
@@ -124,8 +127,8 @@ router.get('/quotation-summary/:id', isAuthenticated, async (req, res) => {
     // Calculate the total price
     await quotation.calculateTotalCost(); // This line ensures the total cost is calculated and updated in the database
     const totalPrice = quotation.totalCost; // Use the updated totalCost for the quotation summary
+    console.log(`Displaying quotation summary for ID: ${id} with total price: ${totalPrice}`);
 
-    console.log(`Displaying quotation summary for ID: ${id}`);
     res.render('quotationSummary', { quotation, totalPrice });
   } catch (error) {
     console.error('Error fetching quotation summary:', error);

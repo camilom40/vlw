@@ -8,7 +8,7 @@
     <div>
         <p>Welcome to your dashboard. Here you can manage your quotations and add new windows to them.</p>
         <a href="/quotation/create-quotation" class="btn btn-primary">Create New Quotation</a>
-        <p>Or select an existing quotation to add windows:</p>
+        <p>Or select an existing quotation to add windows or view the summary:</p>
         <% if (quotations && quotations.length > 0) { %>
             <ul>
                 <% quotations.forEach(function(quotation) { %>
@@ -20,6 +20,7 @@
                             <% }); %>
                         </ul>
                         <a href="/quotation/export-quotation/<%= quotation._id %>" class="btn btn-secondary">Export to PDF</a>
+                        <a href="/quotation/quotation-summary/<%= quotation._id %>" class="btn btn-info">View Summary</a>
                     </li>
                 <% }); %>
             </ul>

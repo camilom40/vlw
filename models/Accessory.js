@@ -17,7 +17,7 @@ const accessorySchema = new mongoose.Schema({
     type: String,
     required: true
   }]
-}, { timestamps: true });
+}, { timestamps: true,strictPopulate: false });
 
 accessorySchema.pre('save', function(next) {
   console.log(`Saving accessory: ${this.name}`);

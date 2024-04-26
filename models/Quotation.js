@@ -4,6 +4,24 @@ const Accessory = require('./Accessory');
 const Glass = require('./Glass');
 const CostSettings = require('./CostSettings');
 
+// Define a sub-schema for glass to be used in the windows array
+const GlassSchema = new mongoose.Schema({
+  type: {
+    type: String,
+    ref: 'Glass',
+    required: true
+  },
+  color: {
+    type: String,
+    required: true
+  },
+  pricePerSquareMeter: {
+    type: Number,
+    required: false
+  },
+  weight: Number
+});
+
 const quotationSchema = new mongoose.Schema({
   projectName: {
     type: String,
@@ -48,49 +66,32 @@ const quotationSchema = new mongoose.Schema({
       enum: ['Black', 'White', 'Bronce'],
       required: true
     },
-    glassType: {
-      type: String,
-      enum: ['Single Glazed', 'Double Glazed'],
-      required: true
-    },
-    glassColor: {
-      type: String,
-      enum: ['Clear', 'Lake Blue', 'Dark Blue', 'Green', 'Bronce'],
-      required: true
-    },
     energeticalLowE: {
       type: Boolean,
       required: true
     },
     systemType: {
       type: String,
-      enum: ['Fixed Window', 'Single Hung Window', 'Horizontal Roller', 'French Door'],
+      enum: ['Fixed', 'Single Hung', 'Horizontal Roller', 'French Door'],
       required: true
     },
-    profiles: [{
-      profileName: String,
-      length: Number,
-      quantity: Number
+    AluminumExtrusions: [{
+      name: String,
+      number: String,
+      pricePerMeter: Number,
+      systemType: String,
+      sizeDiscount: Number
     }],
     accessories: [{
-      accessoryName: String,
-      quantity: Number,
-      price: Number
-    }],
-    glass: {
-      type: {
-        type: String,
-        required: true
-      },
-      color: {
-        type: String,
-        required: true
-      },
-      pricePerSquareMeter: {
+      name: String,
+      price: Number,
+      weight: {
         type: Number,
-        required: true
-      }
-    }
+        required: false
+      },
+      applicableWindowSystems: []
+    }],
+    glass: GlassSchema
   }],
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
@@ -115,22 +116,35 @@ quotationSchema.methods.calculateTotalCost = async function() {
       const acc = await accPromise;
       let windowCost = 0;
       // Calculate cost based on profiles
-      for (const profile of window.profiles) {
-        const extrusion = await AluminumExtrusion.findOne({ name: profile.profileName });
-        const profileCost = profile.length * profile.quantity * (extrusion ? extrusion.pricePerMeter : 0);
+      for (const profile of window.AluminumExtrusions) {
+        const extrusion = await AluminumExtrusion.findOne({ name: profile.name });
+        if (!extrusion) {
+          console.error(`Aluminum Extrusion ${profile.name} not found`);
+          continue;
+        }
+        const profileCost = profile.pricePerMeter * (extrusion ? extrusion.pricePerMeter : 0);
         windowCost += profileCost;
       }
 
       // Calculate cost based on accessories
       for (const accessory of window.accessories) {
-        const accessoryItem = await Accessory.findOne({ name: accessory.accessoryName });
-        const accessoryCost = accessory.quantity * (accessoryItem ? accessoryItem.price : 0);
+        const accessoryItem = await Accessory.findOne({ name: accessory.name });
+        if (!accessoryItem) {
+          console.error(`Accessory ${accessory.name} not found`);
+          continue;
+        }
+        const accessoryCost = accessory.price * (accessoryItem ? accessoryItem.price : 0);
         windowCost += accessoryCost;
       }
 
       // Calculate cost based on glass
       const glassArea = window.width * window.height / 1000000; // Convert mm2 to m2
-      const glassItem = await Glass.findOne({ type: window.glass.type, color: window.glass.color });
+      console.log("🚀 ~ this.totalCost=awaitthis.windows.reduce ~ window.glass._id:", window.glass._id)
+      const glassItem = await Glass.findById(window.glass._id);
+      if (!glassItem) {
+        console.error(`Glass ${window.glass.type} not found`);
+        return acc; // Continue with the next iteration without adding the current window cost
+      }
       const glassCost = glassArea * (glassItem ? glassItem.pricePerSquareMeter : 0);
       windowCost += glassCost;
 
@@ -138,6 +152,7 @@ quotationSchema.methods.calculateTotalCost = async function() {
       const globalCosts = costSettings.seaFreight + costSettings.landFreight + costSettings.packaging + costSettings.labor + costSettings.administrativeExpenses;
       windowCost += globalCosts / this.windows.length; // Distribute global costs evenly across all windows
 
+      console.log(`Accumulated cost: ${acc}, Window cost: ${windowCost}`);
       return acc + windowCost;
     }, Promise.resolve(0));
 

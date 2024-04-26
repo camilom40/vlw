@@ -9,9 +9,9 @@ router.get('/auth/register', (req, res) => {
 
 router.post('/auth/register', async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, role } = req.body;
     // User model will automatically hash the password using bcrypt
-    await User.create({ username: email, password });
+    await User.create({ username: email, password, role });
     res.redirect('/auth/login');
   } catch (error) {
     console.error('Registration error:', error);
