@@ -1,18 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const Glass = require('../../models/Glass');
-const { isAdmin } = require('../middleware/adminMiddleware');
+const {isAdmin} = require('../middleware/adminMiddleware');
 
 // Log for server actions
 const logAction = (message) => {
   console.log(`[GlassRoutes] ${new Date().toISOString()} - ${message}`);
 };
 
-// Middleware to check if user is admin
-router.use(isAdmin);
 
 // Add new glass
-router.post('/add', async (req, res) => {
+router.post('/add',isAdmin, async (req, res) => {
   try {
     const { type, color, pricePerSquareMeter, weight } = req.body;
     const newGlass = new Glass({ type, color, pricePerSquareMeter, weight });
@@ -26,7 +24,7 @@ router.post('/add', async (req, res) => {
 });
 
 // Get all glasses
-router.get('/', async (req, res) => {
+router.get('/',isAdmin, async (req, res) => {
   try {
     const glasses = await Glass.find({});
     logAction('Fetched all glasses');
@@ -38,7 +36,7 @@ router.get('/', async (req, res) => {
 });
 
 // Get glass by ID for edit
-router.get('/edit/:id', async (req, res) => {
+router.get('/edit/:id', isAdmin, async (req, res) => {
   try {
     const { id } = req.params;
     const glass = await Glass.findById(id);
@@ -55,7 +53,7 @@ router.get('/edit/:id', async (req, res) => {
 });
 
 // Update glass
-router.post('/update/:id', async (req, res) => {
+router.post('/update/:id', isAdmin, async (req, res) => {
   try {
     const { id } = req.params;
     const { type, color, pricePerSquareMeter, weight } = req.body;
@@ -69,7 +67,7 @@ router.post('/update/:id', async (req, res) => {
 });
 
 // Delete glass
-router.get('/delete/:id', async (req, res) => {
+router.get('/delete/:id',isAdmin , async (req, res) => {
   try {
     const { id } = req.params;
     await Glass.findByIdAndDelete(id);

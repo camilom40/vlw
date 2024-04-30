@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const Accessory = require('../../models/Accessory');
-const { isAdmin } = require('../../routes/middleware/adminMiddleware');
+const {isAdmin} = require('../middleware/adminMiddleware');
 
 // Log utility
 const logger = require('../../utils/logger');
+
 
 // Route to list all accessories
 router.get('/', isAdmin, async (req, res) => {

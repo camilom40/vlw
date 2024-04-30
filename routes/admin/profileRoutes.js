@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const Profile = require('../../models/Profile');
-const { isAdmin } = require('../middleware/adminMiddleware');
+const {isAdmin} = require('../middleware/adminMiddleware');
 
-router.use(isAdmin);
+
 
 // Create a new profile
-router.post('/', async (req, res) => {
+router.post('/',isAdmin, async (req, res) => {
   try {
     const { name, price, weight, profitMargin } = req.body;
     const newProfile = new Profile({ name, price, weight, profitMargin });
@@ -20,7 +20,7 @@ router.post('/', async (req, res) => {
 });
 
 // Get all profiles
-router.get('/', async (req, res) => {
+router.get('/',isAdmin, async (req, res) => {
   try {
     const profiles = await Profile.find({});
     console.log('Fetched all profiles');
@@ -32,7 +32,7 @@ router.get('/', async (req, res) => {
 });
 
 // Get a single profile by ID
-router.get('/:id', async (req, res) => {
+router.get('/:id', isAdmin, async (req, res) => {
   try {
     const profile = await Profile.findById(req.params.id);
     if (!profile) {
@@ -48,7 +48,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Update a profile
-router.put('/:id', async (req, res) => {
+router.put('/:id', isAdmin, async (req, res) => {
   try {
     const { name, price, weight, profitMargin } = req.body;
     const updatedProfile = await Profile.findByIdAndUpdate(req.params.id, { name, price, weight, profitMargin }, { new: true });
@@ -65,7 +65,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // Delete a profile
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', isAdmin, async (req, res) => {
   try {
     const deletedProfile = await Profile.findByIdAndDelete(req.params.id);
     if (!deletedProfile) {
