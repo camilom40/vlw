@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <%- include('../partials/_head.ejs'); %>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accessory List</title>
     <link rel="stylesheet" href="/css/style.css"> <!-- Ensure Tailwind CSS is correctly linked -->
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
+    <%- include('../partials/_header.ejs'); %>
     <div class="container mx-auto">
         <h1 class="text-xl font-bold my-4">Accessories</h1>
         <a href="/admin/accessories/add" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Add New Accessory</a>
@@ -36,6 +39,7 @@
             </table>
         </div>
     </div>
+    <%- include('../partials/_footer.ejs') %>
     <script src="/js/main.js"></script> <!-- Ensure the main JavaScript file is correctly linked -->
 </body>
 </html>

@@ -8,6 +8,16 @@ const logAction = (message) => {
   console.log(`[GlassRoutes] ${new Date().toISOString()} - ${message}`);
 };
 
+// Route to display form for adding a new glass item
+router.get('/add', isAdmin, (req, res) => {
+  try {
+    res.render('admin/addGlass');
+    logAction('Accessed add glass form');
+  } catch (error) {
+    console.error('Failed to display add glass form:', error);
+    res.status(500).send('Failed to display add glass form');
+  }
+});
 
 // Add new glass
 router.post('/add',isAdmin, async (req, res) => {
@@ -16,7 +26,7 @@ router.post('/add',isAdmin, async (req, res) => {
     const newGlass = new Glass({ type, color, pricePerSquareMeter, weight });
     await newGlass.save();
     logAction(`New glass added: ${type}, ${color}`);
-    res.redirect('/admin/glass');
+    res.redirect('/admin/glasses');
   } catch (error) {
     console.error('Failed to add new glass:', error);
     res.status(500).send('Failed to add new glass');
@@ -28,7 +38,7 @@ router.get('/',isAdmin, async (req, res) => {
   try {
     const glasses = await Glass.find({});
     logAction('Fetched all glasses');
-    res.render('admin/glassList', { glasses });
+    res.render('admin/listGlasses', { glasses });
   } catch (error) {
     console.error('Failed to fetch glasses:', error);
     res.status(500).send('Failed to fetch glasses');
@@ -59,7 +69,7 @@ router.post('/update/:id', isAdmin, async (req, res) => {
     const { type, color, pricePerSquareMeter, weight } = req.body;
     const updatedGlass = await Glass.findByIdAndUpdate(id, { type, color, pricePerSquareMeter, weight }, { new: true });
     logAction(`Updated glass: ${updatedGlass.type}, ${updatedGlass.color}`);
-    res.redirect('/admin/glass');
+    res.redirect('/admin/glasses');
   } catch (error) {
     console.error('Failed to update glass:', error);
     res.status(500).send('Failed to update glass');
@@ -72,7 +82,7 @@ router.get('/delete/:id',isAdmin , async (req, res) => {
     const { id } = req.params;
     await Glass.findByIdAndDelete(id);
     logAction(`Deleted glass with ID: ${id}`);
-    res.redirect('/admin/glass');
+    res.redirect('/admin/glasses');
   } catch (error) {
     console.error('Failed to delete glass:', error);
     res.status(500).send('Failed to delete glass');

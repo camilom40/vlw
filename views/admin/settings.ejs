@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <% include ../partials/_head.ejs %>
+</head>
+<body>
+  <% include ../partials/_header.ejs %>
+  <main>
+    <div class="container">
+      <h1>Global Cost Settings</h1>
+      <form action="/admin/settings" method="post">
+        <div>
+          <label for="seaFreight">Sea Freight</label>
+          <input type="number" id="seaFreight" name="seaFreight" value="<%= settings ? settings.seaFreight : '' %>" required>
+        </div>
+        <div>
+          <label for="landFreight">Land Freight</label>
+          <input type="number" id="landFreight" name="landFreight" value="<%= settings ? settings.landFreight : '' %>" required>
+        </div>
+        <div>
+          <label for="packaging">Packaging</label>
+          <input type="number" id="packaging" name="packaging" value="<%= settings ? settings.packaging : '' %>" required>
+        </div>
+        <div>
+          <label for="labor">Labor</label>
+          <input type="number" id="labor" name="labor" value="<%= settings ? settings.labor : '' %>" required>
+        </div>
+        <div>
+          <label for="administrativeExpenses">Administrative Expenses</label>
+          <input type="number" id="administrativeExpenses" name="administrativeExpenses" value="<%= settings ? settings.administrativeExpenses : '' %>" required>
+        </div>
+        <button type="submit">Save Settings</button>
+      </form>
+    </div>
+  </main>
+  <% include ../partials/_footer.ejs %>
+</body>
+</html>

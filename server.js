@@ -11,6 +11,7 @@ const aluminumExtrusionRoutes = require('./routes/admin/extrusionRoutes');
 const accessoryRoutes = require('./routes/admin/accessoryRoutes');
 const glassRoutes = require('./routes/admin/glassRoutes');
 const profileRoutes = require('./routes/admin/profileRoutes'); // Added profileRoutes
+const settingsRoutes = require('./routes/admin/settingsRoutes'); // Added settingsRoutes
 
 if (!process.env.DATABASE_URL || !process.env.SESSION_SECRET) {
   console.error("Error: config environment variables not set. Please create/edit .env configuration file.");
@@ -80,7 +81,7 @@ app.use(authRoutes);
 // Quotation Routes
 app.use('/quotation', quotationRoutes); // Using the quotation routes
 app.use('/admin/accessories', accessoryRoutes); // Corrected typo in the path and updated to the correct admin path
-app.use('/admin/glass', glassRoutes); // Corrected the path for glass routes to be under admin
+app.use('/admin/glasses', glassRoutes); // Corrected the path for glass routes to be under admin
 app.use('/aluminum', aluminumExtrusionRoutes); // Using the aluminum extrusion routes
 
 // PDF Export Routes
@@ -88,6 +89,9 @@ app.use(pdfExportRoutes); // Using the PDF export routes
 
 // Admin Routes for Profiles
 app.use('/admin/profiles', profileRoutes); // Using the profile routes
+
+// Admin Routes for Settings
+app.use('/admin', settingsRoutes); // Using the settings routes
 
 // Root path response
 app.get("/", (req, res) => {

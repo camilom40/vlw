@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html>
+    
 <head>
+    <%- include('../partials/_head.ejs'); %>
     <title>Profile List</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/css/style.css"> <!-- Ensure the path to CSS is correct -->
 </head>
 <body>
+    <%- include('../partials/_header.ejs') %>
     <h1>Profiles</h1>
     <div>
         <a href="/admin/profiles/add">Add New Profile</a>
@@ -35,5 +39,6 @@
         </tbody>
     </table>
     <script src="/js/main.js"></script> <!-- Ensure the path to JavaScript is correct -->
+    <%- include('../partials/_footer.ejs') %>
 </body>
 </html>

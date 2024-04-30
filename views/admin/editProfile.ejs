@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/_head.ejs') %>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Profiles</title>
+</head>
+<body>
+  <%- include('../partials/_header.ejs') %>
+  <form action="/admin/profiles/update/<%= profile._id %>" method="POST">
+    <div class="field">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" value="<%= profile.name %>" required>
+    </div>
+    <div class="field">
+      <label for="price">Price:</label>
+      <input type="number" id="price" name="price" step="0.01" value="<%= profile.price %>" required>
+    </div>
+    <div class="field">
+      <label for="weight">Weight:</label>
+      <input type="number" id="weight" name="weight" step="0.01" value="<%= profile.weight %>" required>
+    </div>
+    <div class="field">
+      <label for="profitMargin">Profit Margin (%):</label>
+      <input type="number" id="profitMargin" name="profitMargin" step="0.01" value="<%= profile.profitMargin %>" required>
+    </div>
+    <div class="field">
+      <label for="applicableWindowSystems">Applicable Window Systems:</label>
+      <input type="text" id="applicableWindowSystems" name="applicableWindowSystems" value="<%= profile.applicableWindowSystems.join(', ') %>" required>
+      <small>Enter systems separated by a comma (,)</small>
+    </div>
+    <button type="submit">Update Profile</button>
+  </form>
+</body>
+
+
+
+<footer>
+  <script>
+    document.querySelector('form').onsubmit = function(event) {
+      try {
+        const applicableWindowSystemsInput = document.getElementById('applicableWindowSystems');
+        // Split by comma and trim spaces to ensure clean array elements
+        applicableWindowSystemsInput.value = applicableWindowSystemsInput.value.split(',').map(system => system.trim()).join(',');
+      } catch (error) {
+        console.error('Error preparing applicable window systems for submission:', error.message);
+        event.preventDefault(); // Prevent form submission on error
+      }
+    };
+  </script>
+  <%- include ('../partials/_footer.ejs') %>
+</footer>
+
+</html>

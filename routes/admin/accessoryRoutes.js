@@ -53,7 +53,7 @@ router.get('/edit/:id', isAdmin, async (req, res) => {
 });
 
 // Route to update an accessory
-router.post('/edit/:id', isAdmin, async (req, res) => {
+router.post('/update/:id', isAdmin, async (req, res) => {
   try {
     const { name, price, weight, applicableWindowSystems } = req.body;
     await Accessory.findByIdAndUpdate(req.params.id, { name, price, weight, applicableWindowSystems });
