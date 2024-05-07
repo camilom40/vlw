@@ -1,44 +1,57 @@
 <!DOCTYPE html>
-<html>
-    
+<html lang="en">
 <head>
-    <%- include('../partials/_head.ejs'); %>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile List</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css"> <!-- Ensure the path to CSS is correct -->
 </head>
-<body>
-    <%- include('../partials/_header.ejs') %>
-    <h1>Profiles</h1>
-    <div>
-        <a href="/admin/profiles/add">Add New Profile</a>
-    </div>
-    <table>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Weight</th>
-                <th>Profit Margin</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% profiles.forEach(function(profile) { %>
+<body class="bg-gray-100">
+    <header class="bg-blue-500 text-white py-4">
+        <div class="container mx-auto">
+            <h1 class="text-2xl font-bold">Header</h1>
+        </div>
+    </header>
+
+    <div class="container mx-auto py-8">
+        <h1 class="text-3xl font-bold mb-4">Profiles</h1>
+        <div class="mb-4">
+            <a href="/admin/profiles/add" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Add New Profile</a>
+        </div>
+        <table class="w-full border-collapse border border-gray-300">
+            <thead class="bg-gray-200">
                 <tr>
-                    <td><%= profile.name %></td>
-                    <td><%= profile.price %></td>
-                    <td><%= profile.weight %></td>
-                    <td><%= profile.profitMargin %>%</td>
-                    <td>
-                        <a href="/admin/profiles/edit/<%= profile._id %>">Edit</a> |
-                        <a href="/admin/profiles/delete/<%= profile._id %>" onclick="return confirm('Are you sure?');">Delete</a>
-                    </td>
+                    <th class="py-2 px-4 border border-gray-300">Name</th>
+                    <th class="py-2 px-4 border border-gray-300">Price</th>
+                    <th class="py-2 px-4 border border-gray-300">Weight</th>
+                    <th class="py-2 px-4 border border-gray-300">Profit Margin</th>
+                    <th class="py-2 px-4 border border-gray-300">Actions</th>
                 </tr>
-            <% }); %>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <% profiles.forEach(function(profile) { %>
+                    <tr class="hover:bg-gray-100">
+                        <td class="py-2 px-4 border border-gray-300"><%= profile.name %></td>
+                        <td class="py-2 px-4 border border-gray-300"><%= profile.price %></td>
+                        <td class="py-2 px-4 border border-gray-300"><%= profile.weight %></td>
+                        <td class="py-2 px-4 border border-gray-300"><%= profile.profitMargin %>%</td>
+                        <td class="py-2 px-4 border border-gray-300">
+                            <a href="/admin/profiles/edit/<%= profile._id %>" class="text-blue-500 hover:underline">Edit</a> |
+                            <a href="/admin/profiles/delete/<%= profile._id %>" onclick="return confirm('Are you sure?');" class="text-red-500 hover:underline">Delete</a>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+
+    <footer class="bg-blue-500 text-white py-4">
+        <div class="container mx-auto">
+            <h1 class="text-2xl font-bold">Footer</h1>
+        </div>
+    </footer>
+
     <script src="/js/main.js"></script> <!-- Ensure the path to JavaScript is correct -->
-    <%- include('../partials/_footer.ejs') %>
 </body>
 </html>
