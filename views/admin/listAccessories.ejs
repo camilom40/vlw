@@ -1,42 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <%- include('../partials/_head.ejs'); %>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accessory List</title>
-    <link rel="stylesheet" href="/css/style.css"> <!-- Ensure Tailwind CSS is correctly linked -->
+    <!-- Include Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
     <%- include('../partials/_header.ejs'); %>
-    <div class="container mx-auto">
-        <h1 class="text-xl font-bold my-4">Accessories</h1>
+    <div class="container mx-auto mt-10">
+        <h1 class="text-2xl font-bold mb-5">Accessories</h1>
         <a href="/admin/accessories/add" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Add New Accessory</a>
-        <div class="mt-4">
-            <table class="table-auto w-full">
-                <thead>
-                    <tr>
-                        <th class="px-4 py-2">Name</th>
-                        <th class="px-4 py-2">Price</th>
-                        <th class="px-4 py-2">Weight</th>
-                        <th class="px-4 py-2">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% accessories.forEach(function(accessory){ %>
-                        <tr>
-                            <td class="border px-4 py-2"><%= accessory.name %></td>
-                            <td class="border px-4 py-2"><%= accessory.price %></td>
-                            <td class="border px-4 py-2"><%= accessory.weight ? accessory.weight : 'N/A' %></td>
-                            <td class="border px-4 py-2">
-                                <a href="/admin/accessories/edit/<%= accessory._id %>" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded">Edit</a>
-                                <a href="/admin/accessories/delete/<%= accessory._id %>" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded" onclick="return confirm('Are you sure you want to delete this accessory?');">Delete</a>
-                            </td>
-                        </tr>
-                    <% }); %>
-                </tbody>
-            </table>
+        <div class="flex flex-col mt-5">
+            <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+                    <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Name
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Price $
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Weight (kg)
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Actions
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <% accessories.forEach(function(accessory){ %>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm text-gray-900"><%= accessory.name %></div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm text-gray-900"><%= accessory.price %></div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm text-gray-900"><%= accessory.weight ? accessory.weight : 'N/A' %></div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <a href="/admin/accessories/edit/<%= accessory._id %>" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                            <a href="/admin/accessories/delete/<%= accessory._id %>" class="text-red-600 hover:text-red-900 ml-4" onclick="return confirm('Are you sure you want to delete this accessory?');">Delete</a>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <%- include('../partials/_footer.ejs') %>

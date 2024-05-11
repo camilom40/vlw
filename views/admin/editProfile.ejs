@@ -8,48 +8,47 @@
 </head>
 <body>
   <%- include('../partials/_header.ejs') %>
-  <form action="/admin/profiles/update/<%= profile._id %>" method="POST">
-    <div class="field">
-      <label for="name">Name:</label>
-      <input type="text" id="name" name="name" value="<%= profile.name %>" required>
-    </div>
-    <div class="field">
-      <label for="price">Price:</label>
-      <input type="number" id="price" name="price" step="0.01" value="<%= profile.price %>" required>
-    </div>
-    <div class="field">
-      <label for="weight">Weight:</label>
-      <input type="number" id="weight" name="weight" step="0.01" value="<%= profile.weight %>" required>
-    </div>
-    <div class="field">
-      <label for="profitMargin">Profit Margin (%):</label>
-      <input type="number" id="profitMargin" name="profitMargin" step="0.01" value="<%= profile.profitMargin %>" required>
-    </div>
-    <div class="field">
-      <label for="applicableWindowSystems">Applicable Window Systems:</label>
-      <input type="text" id="applicableWindowSystems" name="applicableWindowSystems" value="<%= profile.applicableWindowSystems.join(', ') %>" required>
-      <small>Enter systems separated by a comma (,)</small>
-    </div>
-    <button type="submit">Update Profile</button>
-  </form>
+  <div class="container mt-5">
+    <h1>Edit Profiles</h1>
+    <form action="/admin/profiles/update/<%= profile._id %>" method="POST">
+      <div class="mb-3">
+        <label for="name" class="form-label">Name</label>
+        <input type="text" class="form-control" id="name" name="name" value="<%= profile.name %>" required>
+      </div>
+      <div class="mb-3">
+        <label for="price" class="form-label">Price $</label>
+        <input type="number" step="0.01" class="form-control" id="price" name="price" value="<%= profile.price %>" required>
+      </div>
+      <div class="mb-3">
+        <label for="weight" class="form-label">Weight (Kg)</label>
+        <input type="number" step="0.01" class="form-control" id="weight" name="weight" value="<%= profile.weight %>" required>
+      </div>
+      <div class="mb-3">
+        <label for="profitMargin" class="form-label">Profit Margin (%)</label>
+        <input type="number" step="0.01" class="form-control" id="profitMargin" name="profitMargin" value="<%= profile.profitMargin %>" required>
+      </div>
+      <div class="mb-3">
+        <label for="applicableWindowSystems" class="form-label">Applicable Window Systems</label>
+        <input type="text" class="form-control" id="applicableWindowSystems" name="applicableWindowSystems" value="<%= profile.applicableWindowSystems.join(', ') %>" required>
+        <div class="form-text">Enter systems separated by a comma (,)</div>
+      </div>
+      <button type="submit" class="btn btn-primary">Update Profile</button>
+    </form>
+  </div>
+  <footer>
+    <script>
+      document.querySelector('form').onsubmit = function(event) {
+        try {
+          const applicableWindowSystemsInput = document.getElementById('applicableWindowSystems');
+          // Split by comma and trim spaces to ensure clean array elements
+          applicableWindowSystemsInput.value = applicableWindowSystemsInput.value.split(',').map(system => system.trim()).join(',');
+        } catch (error) {
+          console.error('Error preparing applicable window systems for submission:', error.message);
+          event.preventDefault(); // Prevent form submission on error
+        }
+      };
+    </script>
+    <%- include ('../partials/_footer.ejs') %>
+  </footer>
 </body>
-
-
-
-<footer>
-  <script>
-    document.querySelector('form').onsubmit = function(event) {
-      try {
-        const applicableWindowSystemsInput = document.getElementById('applicableWindowSystems');
-        // Split by comma and trim spaces to ensure clean array elements
-        applicableWindowSystemsInput.value = applicableWindowSystemsInput.value.split(',').map(system => system.trim()).join(',');
-      } catch (error) {
-        console.error('Error preparing applicable window systems for submission:', error.message);
-        event.preventDefault(); // Prevent form submission on error
-      }
-    };
-  </script>
-  <%- include ('../partials/_footer.ejs') %>
-</footer>
-
 </html>
